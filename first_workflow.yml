@@ -10,7 +10,7 @@ jobs:
     - name: welcome msg
       run: echo "hello dragoon"
 
-    - name: hamada
+    - name: xxx
       # run: 
           |
           chmod +x ./script.sh 
