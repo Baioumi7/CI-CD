@@ -1,21 +1,36 @@
 name: dragon ball wf
 on: push
 jobs:
-  first_job:
+  test_job:
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dragon-file
+
+      - name: Test File exists
+        run: ls
+
+  test_job:
+    needs: first-job
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout  # Added a space after the hyphen
-        uses: actions/checkout@v4.1.7
+      - uses: actions/download-artifact@v4
+        with:
+          path: dragon-file
+      
+      - name: Test File exists
+        run: ls
 
-      - name: welcome msg  # Added a space after the hyphen
-        run: echo "hello dragoon"
+  deploy-job:
+    needs: [test_job, first-job]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dragon-file
 
-      - name: xxx  # Added a space after the hyphen
-        run: |
-          chmod +x ./script.sh 
-          ./script.sh
+      - name: Read File
+        run: cat dragon.txt
 
-      - name: run dragon script  # Added a space after the hyphen and fixed the duplicate "run"
-        run: |
-          chmod +x ./script.sh
-          ./script.sh
+      - name: checkout repo files
+        run: ls
