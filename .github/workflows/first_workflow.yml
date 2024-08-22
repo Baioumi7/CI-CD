@@ -2,6 +2,7 @@ name: dragon ball wf
 on: push
 jobs:
   test_job:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -10,24 +11,24 @@ jobs:
       - name: Test File exists
         run: ls
 
-  test_job:
-    needs: first-job
+  second_test_job:
+    needs: test_job
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
-          path: dragon-file
-      
+          name: dragon-file
+
       - name: Test File exists
         run: ls
 
   deploy-job:
-    needs: [test_job, first-job]
+    needs: [second_test_job, test_job]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
-          path: dragon-file
+          name: dragon-file
 
       - name: Read File
         run: cat dragon.txt
