@@ -1,7 +1,24 @@
 name: dragon ball wf
 on: push
+
 jobs:
+  build_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Create an artifact
+        run: echo "Sample content" > dragon.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dragon-file
+          path: dragon.txt
+
   test_job:
+    needs: build_job
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -33,5 +50,6 @@ jobs:
       - name: Read File
         run: cat dragon.txt
 
-      - name: checkout repo files
+      - name: Checkout repo files
+        uses: actions/checkout@v3
         run: ls
